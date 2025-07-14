@@ -2,24 +2,72 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Panel</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>Admin - 5th Semester</title>
 </head>
-<body>
-  <h1>Admin Panel - Upload Files</h1>
-  <div class="folder-container">
-    <div class="folder"><h2>Finite Element Method</h2><input type="file" accept=".pdf"><br><input type="file" accept="image/*"></div>
-    <div class="folder"><h2>Design Of Machine Elements</h2><input type="file" accept=".pdf"><br><input type="file" accept="image/*"></div>
-    <div class="folder"><h2>Heat Transfer</h2><input type="file" accept=".pdf"><br><input type="file" accept="image/*"></div>
-    <div class="folder"><h2>Operation Research</h2><input type="file" accept=".pdf"><br><input type="file" accept="image/*"></div>
-    <div class="folder"><h2>Mechanical Measurement Control</h2><input type="file" accept=".pdf"><br><input type="file" accept="image/*"></div>
-    <div class="folder"><h2>Industrial Automation Robotics</h2><input type="file" accept=".pdf"><br><input type="file" accept="image/*"></div>
-    <div class="folder"><h2>IAR Lab</h2><input type="file" accept=".pdf"><br><input type="file" accept="image/*"></div>
-    <div class="folder"><h2>MMC Lab</h2><input type="file" accept=".pdf"><br><input type="file" accept="image/*"></div>
-    <div class="folder"><h2>HeatTransfer Lab</h2><input type="file" accept=".pdf"><br><input type="file" accept="image/*"></div>
-    <div class="folder"><h2>Training II</h2><input type="file" accept=".pdf"><br><input type="file" accept="image/*"></div>
-    <div class="folder"><h2>Mentoring</h2><input type="file" accept=".pdf"><br><input type="file" accept="image/*"></div>
+<body style="background-color: black; color: white; font-family: sans-serif;">
+  <h1>📚 Admin Panel – 5th Semester</h1>
+
+  <div>
+    <h2>📂 Finite Element Method</h2>
+    <input type="file" id="uploadPDF" accept="application/pdf" />
+    <br /><br />
+    <input type="file" id="uploadImage" accept="image/*" />
+    <br /><br />
+    <p id="uploadStatus"></p>
   </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA9aYpmvxcXJbBPBUJv0-dSlB-3KfCmMg4",
+      authDomain: "th-semester-files.firebaseapp.com",
+      projectId: "th-semester-files",
+      storageBucket: "th-semester-files.appspot.com",
+      messagingSenderId: "233173657118",
+      appId: "1:233173657118:web:f89131aaf75cefdf13700f",
+      measurementId: "G-26W56T05VF"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const storage = getStorage(app);
+
+    function uploadFile(inputId, folderName) {
+      const fileInput = document.getElementById(inputId);
+      const file = fileInput.files[0];
+      if (!file) {
+        alert("Please select a file.");
+        return;
+      }
+
+      const filePath = `${folderName}/${Date.now()}-${file.name}`;
+      const storageRef = ref(storage, filePath);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          document.getElementById("uploadStatus").innerText = `Uploading ${file.name}: ${progress.toFixed(0)}%`;
+        },
+        (error) => {
+          alert("Upload failed: " + error.message);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+            document.getElementById("uploadStatus").innerText = `✅ Uploaded! File URL: ${url}`;
+          });
+        }
+      );
+    }
+
+    document.getElementById("uploadPDF").addEventListener("change", () => {
+      uploadFile("uploadPDF", "FiniteElementMethod");
+    });
+
+    document.getElementById("uploadImage").addEventListener("change", () => {
+      uploadFile("uploadImage", "FiniteElementMethod");
+    });
+  </script>
 </body>
 </html>
