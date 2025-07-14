@@ -1,17 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
   <title>Public Access – 5th Semester</title>
   <style>
     body {
       background-color: #111;
-      color: #f5f5f5;
+      color: white;
       font-family: Arial, sans-serif;
       padding: 20px;
-    }
-    h1 {
-      color: #00ffd5;
     }
     .folder {
       margin-bottom: 40px;
@@ -21,7 +17,7 @@
     }
     .file-link {
       display: block;
-      margin: 8px 0;
+      margin: 5px 0;
       color: #4ecdc4;
       text-decoration: none;
     }
@@ -39,22 +35,7 @@
   <h1>🌐 Public Access – 5th Semester</h1>
   <div id="content"></div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getStorage, ref, listAll, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-storage.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyA9aYpmvxcXJbBPBUJv0-dSlB-3KfCmMg4",
-      authDomain: "th-semester-files.firebaseapp.com",
-      projectId: "th-semester-files",
-      storageBucket: "th-semester-files.appspot.com",
-      messagingSenderId: "233173657118",
-      appId: "1:233173657118:web:f89131aaf75cefdf13700f"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const storage = getStorage(app);
-
+  <script>
     const subjects = [
       "FiniteElementMethod",
       "DesignOfMachineElements",
@@ -69,19 +50,27 @@
       "Mentoring"
     ];
 
+    // 🔁 CHANGE THESE TO MATCH YOUR GITHUB
+    const githubUsername = "yourusername";     // <<== CHANGE THIS
+    const repoName = "5th-semester";           // <<== CHANGE THIS
+
+    const baseURL = `https://${githubUsername}.github.io/${repoName}/files/`;
+    const files = {
+      FiniteElementMethod: ["yourpdfname.pdf"], // <<== Change "yourpdfname.pdf" to the actual PDF file name you uploaded
+      // Add other folders here when you upload files
+    };
+
     const contentDiv = document.getElementById("content");
 
-    async function loadFiles(folderName) {
+    subjects.forEach(subject => {
       const folderDiv = document.createElement("div");
       folderDiv.className = "folder";
-      folderDiv.innerHTML = `<h2>📁 ${folderName.replace(/([A-Z])/g, ' $1')}</h2>`;
+      folderDiv.innerHTML = `<h2>📁 ${subject.replace(/([A-Z])/g, ' $1')}</h2>`;
 
-      const folderRef = ref(storage, folderName);
-      try {
-        const result = await listAll(folderRef);
-        for (const itemRef of result.items) {
-          const url = await getDownloadURL(itemRef);
-          const ext = itemRef.name.split('.').pop().toLowerCase();
+      if (files[subject]) {
+        files[subject].forEach(filename => {
+          const ext = filename.split('.').pop().toLowerCase();
+          const url = `${baseURL}${subject}/${filename}`;
 
           if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext)) {
             const img = document.createElement("img");
@@ -91,19 +80,17 @@
             const link = document.createElement("a");
             link.href = url;
             link.className = "file-link";
-            link.textContent = `📄 ${itemRef.name}`;
+            link.textContent = `📄 ${filename}`;
             link.target = "_blank";
             folderDiv.appendChild(link);
           }
-        }
-      } catch (error) {
-        folderDiv.innerHTML += `<p style="color:red;">Error loading folder: ${error.message}</p>`;
+        });
+      } else {
+        folderDiv.innerHTML += "<p style='color: gray;'>No files added yet.</p>";
       }
 
       contentDiv.appendChild(folderDiv);
-    }
-
-    subjects.forEach(loadFiles);
+    });
   </script>
 </body>
 </html>
