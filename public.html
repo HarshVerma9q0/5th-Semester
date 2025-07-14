@@ -1,25 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Public Access</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <title>Public Access – 5th Semester</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #f5f5f5;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1 {
+      color: #00ffd5;
+    }
+    .folder {
+      margin-bottom: 40px;
+      padding: 10px;
+      border: 1px solid #444;
+      border-radius: 8px;
+    }
+    .file-link {
+      display: block;
+      margin: 8px 0;
+      color: #4ecdc4;
+      text-decoration: none;
+    }
+    .file-link:hover {
+      text-decoration: underline;
+    }
+    img {
+      max-width: 200px;
+      margin: 8px 8px 0 0;
+      border-radius: 6px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Public Access - View Files</h1>
-  <div class="folder-container">
-    <div class="folder"><h2>Finite Element Method</h2><p>Files will appear here.</p></div>
-    <div class="folder"><h2>Design Of Machine Elements</h2><p>Files will appear here.</p></div>
-    <div class="folder"><h2>Heat Transfer</h2><p>Files will appear here.</p></div>
-    <div class="folder"><h2>Operation Research</h2><p>Files will appear here.</p></div>
-    <div class="folder"><h2>Mechanical Measurement Control</h2><p>Files will appear here.</p></div>
-    <div class="folder"><h2>Industrial Automation Robotics</h2><p>Files will appear here.</p></div>
-    <div class="folder"><h2>IAR Lab</h2><p>Files will appear here.</p></div>
-    <div class="folder"><h2>MMC Lab</h2><p>Files will appear here.</p></div>
-    <div class="folder"><h2>HeatTransfer Lab</h2><p>Files will appear here.</p></div>
-    <div class="folder"><h2>Training II</h2><p>Files will appear here.</p></div>
-    <div class="folder"><h2>Mentoring</h2><p>Files will appear here.</p></div>
-  </div>
+  <h1>🌐 Public Access – 5th Semester</h1>
+  <div id="content"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getStorage, ref, listAll, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA9aYpmvxcXJbBPBUJv0-dSlB-3KfCmMg4",
+      authDomain: "th-semester-files.firebaseapp.com",
+      projectId: "th-semester-files",
+      storageBucket: "th-semester-files.appspot.com",
+      messagingSenderId: "233173657118",
+      appId: "1:233173657118:web:f89131aaf75cefdf13700f",
+      measurementId: "G-26W56T05VF"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const storage = getStorage(app);
+
+    const subjects = [
+      "FiniteElementMethod",
+      "DesignOfMachineElements",
+      "HeatTransfer",
+      "OperationResearch",
+      "MechanicalMeasurementControl",
+      "IndustrialAutornationRobotics",
+      "IARLab",
+      "MMCLab",
+      "HeatTransferLab",
+      "TrainingII",
+      "Mentoring"
+    ];
+
+    const contentDiv = document.getElementById("content");
+
+    async function loadFiles(folderName) {
+      const folderDiv = document.createElement("div");
+      folderDiv.className = "folder";
+      folderDiv.innerHTML = `<h2>📁 ${folderName.replace(/([A-Z])/g, ' $1')}</h2>`;
+
+      const folderRef = ref(storage, folderName);
+      try {
+        const result = await listAll(folderRef);
+        for (const itemRef of result.items) {
+          const url = await getDownloadURL(itemRef);
+          const ext = itemRef.name.split('.').pop().toLowerCase();
+
+          if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext)) {
+            const img = document.createElement("img");
+            img.src = url;
+            folderDiv.appendChild(img);
+          } else if (ext === "pdf") {
+            const link = document.createElement("a");
+            link.href = url;
+            link.className = "file-link";
+            link.textContent = `📄 ${itemRef.name}`;
+            link.target = "_blank";
+            folderDiv.appendChild(link);
+          }
+        }
+      } catch (error) {
+        folderDiv.innerHTML += `<p style="color:red;">Error loading folder: ${error.message}</p>`;
+      }
+
+      contentDiv.appendChild(folderDiv);
+    }
+
+    subjects.forEach(loadFiles);
+  </script>
 </body>
 </html>
