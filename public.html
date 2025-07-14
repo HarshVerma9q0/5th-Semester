@@ -1,96 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Public Access – 5th Semester</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>5th Semester - Public Access</title>
   <style>
     body {
-      background-color: #111;
-      color: white;
-      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       padding: 20px;
+      margin: 0;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      color: #00bcd4;
     }
     .folder {
-      margin-bottom: 40px;
-      padding: 10px;
-      border: 1px solid #444;
+      background: #222;
       border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
     }
-    .file-link {
-      display: block;
-      margin: 5px 0;
-      color: #4ecdc4;
+    .folder h2 {
+      color: #ff9800;
+      margin-top: 0;
+    }
+    a.pdf-link {
+      display: inline-block;
+      margin-top: 10px;
+      color: #4caf50;
       text-decoration: none;
+      font-weight: bold;
     }
-    .file-link:hover {
+    a.pdf-link:hover {
       text-decoration: underline;
-    }
-    img {
-      max-width: 200px;
-      margin: 8px 8px 0 0;
-      border-radius: 6px;
     }
   </style>
 </head>
 <body>
-  <h1>🌐 Public Access – 5th Semester</h1>
-  <div id="content"></div>
+  <h1>5th Semester - Public Access</h1>
 
-  <script>
-    const subjects = [
-      "FiniteElementMethod",
-      "DesignOfMachineElements",
-      "HeatTransfer",
-      "OperationResearch",
-      "MechanicalMeasurementControl",
-      "IndustrialAutornationRobotics",
-      "IARLab",
-      "MMCLab",
-      "HeatTransferLab",
-      "TrainingII",
-      "Mentoring"
-    ];
+  <div class="folder">
+    <h2>Finite Element Method</h2>
+    <a class="pdf-link" href="FiniteElementMethod/PCME-110.pdf" target="_blank" rel="noopener noreferrer">
+      📄 PCME-110.pdf
+    </a>
+  </div>
 
-    // 🔁 CHANGE THESE TO MATCH YOUR GITHUB
-    const githubUsername = "HarshVerma9q0";     // <<== CHANGE THIS
-    const repoName = "5th-semester";           // <<== CHANGE THIS
+  <!-- Add other folders here as you want, example: -->
+  <div class="folder"><h2>Design Of Machine Elements</h2><p>No files uploaded yet.</p></div>
+  <div class="folder"><h2>Heat Transfer</h2><p>No files uploaded yet.</p></div>
+  <div class="folder"><h2>Operation Research</h2><p>No files uploaded yet.</p></div>
+  <div class="folder"><h2>Mechanical Measurement Control</h2><p>No files uploaded yet.</p></div>
+  <div class="folder"><h2>Industrial Autornation Robotics</h2><p>No files uploaded yet.</p></div>
+  <div class="folder"><h2>IAR Lab</h2><p>No files uploaded yet.</p></div>
+  <div class="folder"><h2>MMC Lab</h2><p>No files uploaded yet.</p></div>
+  <div class="folder"><h2>HeatTransfer Lab</h2><p>No files uploaded yet.</p></div>
+  <div class="folder"><h2>Training II</h2><p>No files uploaded yet.</p></div>
+  <div class="folder"><h2>Mentoring</h2><p>No files uploaded yet.</p></div>
 
-    const baseURL = `https://${githubUsername}.github.io/${repoName}/files/`;
-    const files = {
-      FiniteElementMethod: ["PCME-110.pdf"], // <<== Change "yourpdfname.pdf" to the actual PDF file name you uploaded
-      // Add other folders here when you upload files
-    };
-
-    const contentDiv = document.getElementById("content");
-
-    subjects.forEach(subject => {
-      const folderDiv = document.createElement("div");
-      folderDiv.className = "folder";
-      folderDiv.innerHTML = `<h2>📁 ${subject.replace(/([A-Z])/g, ' $1')}</h2>`;
-
-      if (files[subject]) {
-        files[subject].forEach(filename => {
-          const ext = filename.split('.').pop().toLowerCase();
-          const url = `${baseURL}${subject}/${filename}`;
-
-          if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext)) {
-            const img = document.createElement("img");
-            img.src = url;
-            folderDiv.appendChild(img);
-          } else if (ext === "pdf") {
-            const link = document.createElement("a");
-            link.href = url;
-            link.className = "file-link";
-            link.textContent = `📄 ${filename}`;
-            link.target = "_blank";
-            folderDiv.appendChild(link);
-          }
-        });
-      } else {
-        folderDiv.innerHTML += "<p style='color: gray;'>No files added yet.</p>";
-      }
-
-      contentDiv.appendChild(folderDiv);
-    });
-  </script>
 </body>
 </html>
